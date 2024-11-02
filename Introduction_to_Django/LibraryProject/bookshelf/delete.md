@@ -1,10 +1,7 @@
-
-#### 4. Delete Operation (delete.md)
-
-```markdown
 # Delete Operation
 
-## Command:
+## Import Statement
 ```python
+from bookshelf.models import Book
 book.delete()
 print(Book.objects.all())
