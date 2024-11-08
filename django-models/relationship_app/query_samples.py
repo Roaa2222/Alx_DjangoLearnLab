@@ -12,7 +12,7 @@ try:
 except Library.DoesNotExist:
     print(f"Error: Library '{library_name}' does not exist.")
 
-# 2. Query all books by a specific author
+# 2. Query all books by a specific author (no changes here)
 try:
     author_name = "Author Name"
     # First, get the author object
@@ -34,7 +34,9 @@ except Author.DoesNotExist:
 try:
     library_name = "Library Name"
     library = Library.objects.get(name=library_name)
-    librarian = library.librarian  # OneToOneField with related_name
+    
+    # Retrieve the librarian using Librarian.objects.get()
+    librarian = Librarian.objects.get(library=library)
 
     print(f"\nLibrarian of {library_name}: {librarian.name}")
 except Library.DoesNotExist:
