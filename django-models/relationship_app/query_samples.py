@@ -15,11 +15,14 @@ except Library.DoesNotExist:
 # 2. Query all books by a specific author
 try:
     author_name = "Author Name"
-    # Use filter to get all books by the author
-    books_by_author = Book.objects.filter(author__name=author_name)
+    # First, get the author object
+    author = Author.objects.get(name=author_name)
+    
+    # Then filter the books by the author's foreign key
+    books_by_author = Book.objects.filter(author=author)
 
     print(f"\nBooks by {author_name}:")
-    if books_by_author.exists():  # Check if there are books by the author
+    if books_by_author.exists():  # Check if books exist
         for book in books_by_author:
             print(book.title)
     else:
