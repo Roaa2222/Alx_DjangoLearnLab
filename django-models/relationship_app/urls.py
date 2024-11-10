@@ -8,3 +8,12 @@ urlpatterns = [
     path('librarian_view/', librarian_view, name='librarian_view'),
     path('member_view/', member_view, name='member_view'),
 ]
+from django.urls import path
+from django.contrib.auth.views import LoginView, LogoutView  # Import Login and Logout views
+from . import views  # Import the custom register view
+
+urlpatterns = [
+    path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),  # Login URL pattern
+    path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),  # Logout URL pattern
+    path('register/', views.register, name='register'),  # Register URL pattern
+]
