@@ -8,7 +8,6 @@ class UserProfile(models.Model):
     ROLE_CHOICES = [
         ('Admin', 'Admin'),
         ('Member', 'Member')
-        ('Librarian', 'Librarian')
     ]
 
     # One-to-One relationship with the User model
@@ -29,3 +28,4 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
