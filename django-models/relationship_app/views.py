@@ -1,7 +1,7 @@
 # relationship_app/views.py
 from django.shortcuts import render
 from django.views.generic import DetailView
-from .models import Book, Library  # Import Library model
+from .models import Book, Library  # Ensure Library is imported here
 
 # Function-based view (FBV) to list all books
 def list_books(request):
@@ -12,9 +12,6 @@ def list_books(request):
 
 # Class-based view (CBV) to display details of a specific library
 class LibraryDetailView(DetailView):
-    # The model associated with this view (Library)
-    model = Library
-    # The template to render for this view
-    template_name = 'relationship_app/library_detail.html'
-    # The name for the context variable that will be passed to the template
-    context_object_name = 'library'
+    model = Library  # This will use the Library model to fetch details
+    template_name = 'relationship_app/library_detail.html'  # Path to the template
+    context_object_name = 'library'  # The name of the context variable for the template
