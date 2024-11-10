@@ -1,15 +1,8 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
+# relationship_app/views.py
+from django.shortcuts import render
+from .models import Book  # Ensure Book model is imported
 
-# View for user registration
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)  # Log in the user after successful registration
-            return redirect('home')  # Replace 'home' with your desired redirect URL
-    else:
-        form = UserCreationForm()
-    return render(request, 'relationship_app/register.html', {'form': form})
+# Function-based view to list all books
+def list_books(request):
+    books = Book.objects.all()  # This ensures all books are fetched
+    return render(request, 'relationship_app/list_books.html', {'books': books})  # Ensure the correct template path
