@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
 
 # View for user registration
 def register(request):
@@ -13,6 +12,4 @@ def register(request):
             return redirect('home')  # Replace 'home' with your desired redirect URL
     else:
         form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
-
-# You can add views for login and logout using Django’s built-in views or customize as needed.
+    return render(request, 'relationship_app/register.html', {'form': form})
