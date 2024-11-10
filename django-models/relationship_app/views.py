@@ -1,28 +1,15 @@
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import user_passes_test, permission_required
 from django.views.generic import DetailView
-from .models import Book, Library, UserProfile
+from .models import Library  # Ensure this import is present
 
-# Function-based view to list all books
-def list_books(request):
-    books = Book.objects.all()
-    return render(request, 'relationship_app/list_books.html', {'books': books})
-
-# Class-based view for library details
+# Class-based view to display details for a specific library
 class LibraryDetailView(DetailView):
     model = Library
-    template_name = 'relationship_app/library_detail.html'
+    template_name = 'relationship_app/library_detail.html'  # Ensure you have this template
     context_object_name = 'library'
 
-# Access control views
-@user_passes_test(lambda u: u.userprofile.role == 'Admin')
-def admin_view(request):
-    return render(request, 'relationship_app/admin_view.html')
-
-@user_passes_test(lambda u: u.userprofile.role == 'Librarian')
-def librarian_view(request):
-    return render(request, 'relationship_app/librarian_view.html')
-
-@user_passes_test(lambda u: u.userprofile.role == 'Member')
-def member_view(request):
-    return render(request, 'relationship_app/member_view.html')
+    # Optionally, if you want to customize the context:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['books'] = self.object.books.all()  # Fetch all books associated with the library
+        return context
