@@ -1,35 +1,18 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Book
-from .forms import BookForm
-from django.contrib.auth.decorators import permission_required
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
-@permission_required('relationship_app.can_add_book', raise_exception=True)
-def add_book(request):
+# View for user registration
+def register(request):
     if request.method == 'POST':
-        form = BookForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('book_list')
+            user = form.save()
+            login(request, user)  # Log in the user after successful registration
+            return redirect('home')  # Replace 'home' with your desired redirect URL
     else:
-        form = BookForm()
-    return render(request, 'relationship_app/add_book.html', {'form': form})
+        form = UserCreationForm()
+    return render(request, 'register.html', {'form': form})
 
-@permission_required('relationship_app.can_change_book', raise_exception=True)
-def edit_book(request, book_id):
-    book = get_object_or_404(Book, id=book_id)
-    if request.method == 'POST':
-        form = BookForm(request.POST, instance=book)
-        if form.is_valid():
-            form.save()
-            return redirect('book_list')
-    else:
-        form = BookForm(instance=book)
-    return render(request, 'relationship_app/edit_book.html', {'form': form})
-
-@permission_required('relationship_app.can_delete_book', raise_exception=True)
-def delete_book(request, book_id):
-    book = get_object_or_404(Book, id=book_id)
-    if request.method == 'POST':
-        book.delete()
-        return redirect('book_list')
-    return render(request, 'relationship_app/confirm_delete.html', {'book': book})
+# You can add views for login and logout using Django’s built-in views or customize as needed.
