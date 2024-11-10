@@ -31,10 +31,19 @@ class Library(models.Model):
     def __str__(self):
         return self.name
 
+# Librarian Model
+class Librarian(models.Model):
+    name = models.CharField(max_length=100)
+    library = models.OneToOneField(Library, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
 # UserProfile Model for role-based access
 class UserProfile(models.Model):
     ROLES = (
         ('Admin', 'Admin'),
+        ('Librarian', 'Librarian'),
         ('Member', 'Member'),
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
