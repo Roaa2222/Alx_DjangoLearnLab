@@ -24,7 +24,26 @@ def register(request):
     
     return render(request, 'relationship_app/register.html', {'form': form})  # Ensure the template is correct
 
+from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import render
+from django.http import HttpResponseForbidden
 
+# Custom function to check user roles
+def role_check(user, role):
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == role
+
+@user_passes_test(lambda user: role_check(user, 'Admin'))
+def admin_view(request):
+    return render(request, 'admin_view.html')
+
+@user_passes_test(lambda user: role_check(user, 'Librarian'))
+def librarian_view(request):
+    return render(request, 'librarian_view.html')
+
+@user_passes_test(lambda user: role_check(user, 'Member'))
+def member_view(request):
+    return render(request, 'member_view.html')
+    
 # Class-based view to display details for a specific library
 class LibraryDetailView(DetailView):
     model = Library
