@@ -26,7 +26,6 @@ def register(request):
 
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
-from django.http import HttpResponseForbidden
 
 # Custom function to check user roles
 def role_check(user, role):
