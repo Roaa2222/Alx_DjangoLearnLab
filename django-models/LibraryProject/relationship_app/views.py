@@ -27,6 +27,18 @@ def register(request):
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
 
+# Check function to validate if the user is an admin
+def is_admin(user):
+    return user.userprofile.role == 'Admin'
+
+# Check function to validate if the user is a librarian
+def is_librarian(user):
+    return user.userprofile.role == 'Librarian'
+
+# Check function to validate if the user is a member
+def is_member(user):
+    return user.userprofile.role == 'Member'
+
 # Custom function to check user roles
 def role_check(user, role):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == role
