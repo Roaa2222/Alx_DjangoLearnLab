@@ -3,6 +3,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
 from .models import Article
+from .models import Book  # Ensure that you have a Book model in models.py
+
+@permission_required('bookshelf.view_book', raise_exception=True)
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'book_list.html', {'books': books})
+
+@permission_required('bookshelf.view_book', raise_exception=True)
+def books(request):
+    # This could be another view related to a specific book functionality
+    return render(request, 'books.html')
 
 @permission_required('advanced_features_and_security.can_create', raise_exception=True)
 def create_article(request):
