@@ -27,6 +27,14 @@ def register(request):
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
 
+def is_admin(user):
+    return user.groups.filter(name='Admin').exists()
+
+# Decorated view that only 'Admin' users can access
+@user_passes_test(is_admin, login_url='/login/')
+def admin_only_view(request):
+    return render(request, 'admin_page.html')
+
 # Check function to validate if the user is an admin
 def is_admin(user):
     return user.userprofile.role == 'Admin'
