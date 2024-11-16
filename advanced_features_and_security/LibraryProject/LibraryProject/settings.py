@@ -100,6 +100,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Add this line to ensure Django recognizes secure connections from a proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'  # Prevents the site from being embedded in a frame
 SECURE_CONTENT_TYPE_NOSNIFF = True
