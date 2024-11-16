@@ -4,7 +4,17 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
 from .models import Article
 from .models import Book  # Ensure that you have a Book model in models.py
+from .forms import ExampleForm  # Ensure ExampleForm is imported
 
+# Existing or new view function using ExampleForm
+def example_view(request):
+    form = ExampleForm()  # Create an instance of the form
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            # Handle form data here
+            pass
+    return render(request, 'bookshelf/form_example.html', {'form': form})
 @permission_required('bookshelf.view_book', raise_exception=True)
 def book_list(request):
     books = Book.objects.all()
