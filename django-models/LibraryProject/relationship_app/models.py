@@ -6,6 +6,19 @@ from .models import Author
 from django.db import models
 from .models import Library  
 
+class ExampleModel(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+
+    class Meta:
+        permissions = [
+            ('can_view_example', 'Can view example'),  # Custom permission
+            ('can_edit_example', 'Can edit example'),  # Additional permission if needed
+        ]
+
+    def __str__(self):
+        return self.name
+
 class Author(models.Model):
     name = models.CharField(max_length=255)
 
@@ -14,6 +27,18 @@ class Author(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="books")
+    published_date = models.DateField()
+    isbn = models.CharField(max_length=13, unique=True)
+
+    class Meta:
+        permissions = [
+            ('can_add_book', 'Can add book'),        # Custom permission for adding books
+            ('can_change_book', 'Can change book'),  # Custom permission for modifying books
+            ('can_delete_book', 'Can delete book'),  # Custom permission for deleting books
+        ]
+
+    def __str__(self):
+        return self.title
 
     def __str__(self):
         return self.title

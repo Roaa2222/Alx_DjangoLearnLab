@@ -11,9 +11,20 @@ urlpatterns = [
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView  # Import Login and Logout views
 from . import views  # Import the custom register view
+from .views import admin_only_view
+
+
 
 urlpatterns = [
     path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),  # Login URL pattern
     path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),  # Logout URL pattern
-    path('register/', views.register, name='register'),  # Register URL pattern
+    path('register/', views.register, name='register'),  # Register URL pattern,
+    path('admin-view/', admin_only_view, name='admin_only_view'), 
+]
+from .views import add_book, edit_book, delete_book
+
+urlpatterns = [
+    path('add_book/', add_book, name='add_book'),
+    path('edit_book/<int:book_id>/', edit_book, name='edit_book'),
+    path('delete_book/<int:book_id>/', delete_book, name='delete_book'),
 ]

@@ -27,6 +27,14 @@ def register(request):
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
 
+def is_admin(user):
+    return user.groups.filter(name='Admin').exists()
+
+# Decorated view that only 'Admin' users can access
+@user_passes_test(is_admin, login_url='/login/')
+def admin_only_view(request):
+    return render(request, 'admin_page.html')
+
 # Check function to validate if the user is an admin
 def is_admin(user):
     return user.userprofile.role == 'Admin'
@@ -66,4 +74,37 @@ class LibraryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['books'] = self.object.books.all()  # Fetch all books related to the library
         return context
+from django.contrib.auth.decorators import permission_required
+from .models import Book
+from .forms import BookForm  # Ensure you have a form for book handling
 
+@permission_required('relationship_app.can_add_book', login_url='/login/')
+def add_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')  # Replace with your actual redirect view name
+    else:
+        form = BookForm()
+    return render(request, 'add_book.html', {'form': form})
+
+@permission_required('relationship_app.can_change_book', login_url='/login/')
+def edit_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == 'POST':
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')  # Replace with your actual redirect view name
+    else:
+        form = BookForm(instance=book)
+    return render(request, 'edit_book.html', {'form': form})
+
+@permission_required('relationship_app.can_delete_book', login_url='/login/')
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('book_list')  # Replace with your actual redirect view name
+    return render(request, 'confirm_delete_book.html', {'book': book})
