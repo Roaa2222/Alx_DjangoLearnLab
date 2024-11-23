@@ -1,5 +1,5 @@
 from rest_framework.generics.ListAPIView import ListAPIView
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets.ModelViewSet import ModelViewSet
 from .models import Book
 from .serializers import BookSerializer
 
