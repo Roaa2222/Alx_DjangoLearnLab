@@ -3,6 +3,20 @@ from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from .models import Book
 from django.contrib.auth.models import User
+from django.test import TestCase
+
+class YourTestCase(TestCase):
+    def setUp(self):
+        # Create a user for login
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+
+    def test_view_requires_login(self):
+        # Log in the user
+        self.client.login(username='testuser', password='testpassword')
+
+        # Now you can make requests that require authentication
+        response = self.client.get('/some-protected-url/')
+        self.assertEqual(response.status_code, 200)
 
 class BookAPITestCase(APITestCase):
     @classmethod
