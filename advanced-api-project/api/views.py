@@ -20,10 +20,11 @@ class BookListView(generics.ListAPIView):
         DjangoFilterBackend,  # For filtering
         filters.SearchFilter,  # For searching
         filters.OrderingFilter  # For ordering
+         DjangoFilterBackend, 
     ]
 
     # Define filterable fields
-    filterset_fields = ['title', 'author', 'published_date']
+    filterset_fields = ['title', 'author', 'published_date', 'publication_year']
 
     # Define searchable fields
     search_fields = ['title', 'author']
