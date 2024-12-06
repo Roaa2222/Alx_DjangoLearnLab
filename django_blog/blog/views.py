@@ -13,6 +13,42 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
+from django.views.generic import ListView
+from django.db.models import Q
+from .models import Post
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'post_list.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        queryset = Post.objects.all()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+        return queryset
+
+class TaggedPostListView(ListView):
+    model = Post
+    template_name = 'tagged_post_list.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag = self.kwargs.get('tag')
+        return Post.objects.filter(tags__name__icontains=tag)
+
+
+
+
+
+
+
+
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
