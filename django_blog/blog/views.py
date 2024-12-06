@@ -1,10 +1,63 @@
 from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django import forms
+from django.contrib import messages
+from .models import Post, Comment
+from .forms import CommentForm
+
+@login_required
+def add_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+            messages.success(request, "Comment added successfully!")
+            return redirect(post.get_absolute_url())
+    else:
+        form = CommentForm()
+    return render(request, 'add_comment.html', {'form': form})
+
+@login_required
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user != comment.author:
+        messages.error(request, "You are not allowed to edit this comment.")
+        return redirect(comment.post.get_absolute_url())
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Comment updated successfully!")
+            return redirect(comment.post.get_absolute_url())
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'edit_comment.html', {'form': form})
+
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user != comment.author:
+        messages.error(request, "You are not allowed to delete this comment.")
+        return redirect(comment.post.get_absolute_url())
+    if request.method == 'POST':
+        comment.delete()
+        messages.success(request, "Comment deleted successfully!")
+        return redirect(comment.post.get_absolute_url())
+    return render(request, 'delete_comment.html', {'comment': comment})
+
+
+
+
+
 
 # Extend UserCreationForm to include email
 class CustomUserCreationForm(UserCreationForm):
