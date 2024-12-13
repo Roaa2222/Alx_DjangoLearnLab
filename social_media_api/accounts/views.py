@@ -7,7 +7,7 @@ from .serializers import RegisterSerializer, UserSerializer
 from .models import CustomUser
 from django.shortcuts import get_object_or_404
 
-
+generics.GenericAPIView", "permissions.IsAuthenticated", "CustomUser.objects.all()
 class FollowUserView(APIView):
     def post(self, request, user_id):
         user_to_follow = get_object_or_404(CustomUser, id=user_id)
