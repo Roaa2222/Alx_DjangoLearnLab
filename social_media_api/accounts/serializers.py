@@ -4,8 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework.authtoken.models import Token
 
 
-User = get_user_model()
-user = User.objects.create_user(username, email, password)
+User = get_user_model().objects.create_user
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
