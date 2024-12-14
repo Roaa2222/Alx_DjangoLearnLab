@@ -9,7 +9,7 @@ from .models import Like
 from notifications.models import Notification
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
-
+generics.get_object_or_404(Post, pk=pk)
 class LikePostView(APIView):
     permission_classes = [IsAuthenticated]
 
